@@ -35,17 +35,20 @@ private:
 	mutable Eigen::MatrixX<T> b;
 
 };
-typedef IOFunc_		IOFunc;
+typedef IOFunc_<>	IOFunc;
 
 template<typename nn_t, typename io_t>
 inline bool compatible(NeuralNetwork<nn_t>& nn, IOFunc_<io_t>& f)
-	{ return nn.inputs() == f.inputs() && nn.outputs() == f.outputs(); }
+{ return nn.inputs() == f.inputs() && nn.outputs() == f.outputs(); }
+
 template<typename nn_t, typename io_t>
 inline void genFunc(NeuralNetwork<nn_t>& nn, IOFunc_<io_t>& f)
-	{ f.gen(nn.inputs(), nn.outputs()); }
+{ f.gen(nn.inputs(), nn.outputs()); }
+
 template<typename nn_t, typename ds_t, typename io_t>
 inline void genFuncData(NeuralNetwork<nn_t>& nn, DataSet_<ds_t>& d, size_t s, IOFunc_<io_t>& f = IOFunc_<io_t>{})
-	{ genFunc(nn, f); genData(nn, d, s, f); }
+{ genFunc(nn, f); genData(nn, d, s, f); }
+
 template<typename nn_t, typename ds_t, typename io_t>
 void genData(NeuralNetwork<nn_t>& nn, DataSet_<ds_t>& d, size_t s, IOFunc_<io_t>& f) {
 	if (compatible(nn, f)) {

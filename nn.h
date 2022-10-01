@@ -17,8 +17,8 @@ template<typename T> using VecR_		=	Eigen::RowVectorX<T>;
 template<typename T> using VecC_		=	Eigen::VectorX<T>;
 
 template<typename T> using IOList_		=	std::vector<std::unique_ptr<VecR_<T> > >;
-template<typename T> using DataSet_		=	std::pair<IOList_<T>, IOList<T> >;
-template<typename T> using DataPoint_	=	std::pair<std::unique_ptr<VecR<T> >, std::unique_ptr<VecR<T> > >;
+template<typename T> using DataSet_		=	std::pair<IOList_<T>, IOList_<T> >;
+template<typename T> using DataPoint_	=	std::pair<std::unique_ptr<VecR_<T> >, std::unique_ptr<VecR_<T> > >;
 template<typename T> using DataSetR_	=	std::vector<DataPoint_<T> >;
 
 
@@ -47,6 +47,7 @@ public:
 	using VecC		=	VecC_<T>;
 	using IOList	=	IOList_<T>;
 	using DataSet	=	DataSet_<T>;
+	using DataPoint =	DataPoint_<T>;
 
 	typedef std::unique_ptr<VecR>		Layer_t;
 	typedef std::unique_ptr<Matrix>		Weight_t;
@@ -150,7 +151,7 @@ protected:
 
 
 
-#define ASSERT_NUMERIC(T)	static_assert(std::is_arithmetic<(T)>::value, "Type must be arithmetic");
+#define ASSERT_NUMERIC(T)	static_assert(std::is_arithmetic<T>::value, "Type must be arithmetic");
 
 template<typename T> inline static T sigmoid(T x)			{ ASSERT_NUMERIC(T) return (T)1 / (1 + exp(-x)); }
 template<typename T> inline static T hyperbolictan(T x)		{ ASSERT_NUMERIC(T) return tanh(x); }
@@ -662,7 +663,7 @@ void NeuralNetwork<T>::export_weights(std::ostream& out) {
 template<typename T>
 void NeuralNetwork<T>::parse_weights(std::istream& in, Weights_t& weights) {
 	std::string line;
-	std::vector<std::vector<Scalar_t> > buff;
+	std::vector<std::vector<T> > buff;
 	//size_t r = 0, c = 0;
 	weights.clear();
 	while (std::getline(in, line, '\n')) {
